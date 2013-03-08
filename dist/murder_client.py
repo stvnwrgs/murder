@@ -41,6 +41,7 @@ from sys import argv, stdout
 import sys
 import os
 import threading
+import signal
 from sha import sha
 from time import strftime
 from BitTornado.clock import clock
@@ -109,6 +110,7 @@ class HeadlessDisplayer:
             return
 
           os.setsid()
+          signal.signal(signal.SIGHUP, signal.SIG_IGN)
           if os.fork():
             os._exit(0)
             return
