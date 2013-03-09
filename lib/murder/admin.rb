@@ -41,16 +41,16 @@ namespace :murder do
 
   desc "If the Bittorrent tracker is running, this will kill the process. Note that if it is not running you will receive an error."
   task :stop_tracker, :roles => :tracker do
-    run("pkill -f 'SCREEN.*murder_tracker.py'")
+    run("pkill -P 1 -f 'SCREEN.*murder_tracker.py'")
   end
 
   desc "Identical to stop_seeding, except this will kill all seeding processes. No 'tag' argument is needed."
   task :stop_all_seeding, :roles => :seeder do
-    run("pkill -f \"SCREEN.*seeder-\"")
+    run("pkill -P 1 -f \"SCREEN.*seeder-\"")
   end
 
   desc 'Sometimes peers can go on forever (usually because of an error). This command will forcibly kill all "murder_client.py peer" commands that are running.'
   task :stop_all_peering, :roles => :peer do
-    run("pkill -f \"murder_client.py peer\"")
+    run("pkill -P 1 -f \"murder_client.py peer\"")
   end
 end

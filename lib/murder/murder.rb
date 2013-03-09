@@ -15,7 +15,7 @@
 # limitations under the License.
 
 namespace :murder do
-  HOST = "LC_ALL=C host $CAPISTANO:HOST$ | awk '/has address/ { print $4 } // { print \"$CAPISTRANO:HOST$\" }' | head -n 1"
+  HOST = "LC_ALL=C host $CAPISTRANO:HOST$ | awk '/has address/ { print $4 } // { print \"$CAPISTRANO:HOST$\" }' | head -n 1"
 
   desc <<-DESC
   Compresses the directory specified by the passed-in argument 'files_path' and creates a .torrent file identified by the 'tag' argument. Be sure to use the same 'tag' value with any following commands. Any .git directories will be skipped. Once completed, the .torrent will be downloaded to your local /tmp/TAG.tgz.torrent.
@@ -55,7 +55,7 @@ namespace :murder do
   DESC
   task :start_seeding, :roles => :seeder do
     require_tag
-    run "SCREENRC=/dev/null SYSSCREENRC=/dev/null screen -dms 'seeder-#{tag}' python #{remote_murder_path}/murder_client.py seeder '#{filename}.torrent' '#{filename}' `#{HOST}`"
+    run "SCREENRC=/dev/null SYSSCREENRC=/dev/null screen -dms 'seeder-#{tag}' python #{remote_murder_path}/murder_client.py seeder '#{filename}.torrent' '#{filename}' `#{HOST}` && sleep 0.2"
   end
 
   desc <<-DESC
@@ -63,7 +63,7 @@ namespace :murder do
   DESC
   task :stop_seeding, :roles => :seeder do
     require_tag
-    run("pkill -f \"SCREEN.*seeder-#{tag}\"")
+    run("pkill -P 1 -f \"SCREEN.*seeder-#{tag}\"")
   end
 
   desc <<-DESC
@@ -104,7 +104,7 @@ namespace :murder do
 
   task :stop_peering, :roles => :peer do
     require_tag
-    run("pkill -f \"murder_client.py peer.*#{filename}\"")
+    run("pkill -P 1 -f \"murder_client.py peer.*#{filename}\"")
   end
 
   task :clean_temp_files, :roles => [:peer, :seeder] do
