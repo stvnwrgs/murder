@@ -15,7 +15,7 @@
 # limitations under the License.
 
 namespace :murder do
-  HOST = "LC_ALL=C host $CAPISTRANO:HOST$ | awk '/has address/ { print $4 } // { print \"$CAPISTRANO:HOST$\" }' | head -n 1"
+  HOST = "LC_ALL=C sudo ifconfig | grep 'inet addr' | awk '{print $2}' | awk -F : '{print $2}' | he' | head -1"
 
   desc <<-DESC
   Compresses the directory specified by the passed-in argument 'files_path' and creates a .torrent file identified by the 'tag' argument. Be sure to use the same 'tag' value with any following commands. Any .git directories will be skipped. Once completed, the .torrent will be downloaded to your local /tmp/TAG.tgz.torrent.
