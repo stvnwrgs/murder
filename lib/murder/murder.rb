@@ -63,7 +63,7 @@ namespace :murder do
   DESC
   task :stop_seeding, :roles => :seeder do
     require_tag
-    run("pkill -P 1 -f \"SCREEN.*seeder-#{tag}\"")
+    run("pkill -P 1 -f \"python.*seeder-#{tag}\"")
   end
 
   desc <<-DESC
@@ -104,7 +104,7 @@ namespace :murder do
 
   task :stop_peering, :roles => :peer do
     require_tag
-    run("pkill -P 1 -f \"murder_client.py peer.*#{filename}\"")
+    run("pkill -P 1 -f \"murder_client.py peer\"")
   end
 
   task :clean_temp_files, :roles => [:peer, :seeder] do
